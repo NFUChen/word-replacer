@@ -41,6 +41,7 @@ def encode():
         return "No illegal words", 404
     
     encoded = Encoder(json_data["source"], words).encode()
+    history.add_action(encoded)
     
     return encoded, 200
 @app.route("/add_word", methods=["POST"])
