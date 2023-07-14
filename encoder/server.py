@@ -84,12 +84,12 @@ def get_all_words_with_suggesions():
     return json.dumps(db_manager.get_all_words_with_suggesions(),default=str)
 
 
-@app.routre("/undo")
+@app.route("/undo")
 @handle_server_errors
 def undo():
     return history.undo()
 
-@app.routre("/redo")
+@app.route("/redo")
 @handle_server_errors
 def redo():
     return history.redo()
