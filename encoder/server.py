@@ -34,6 +34,7 @@ def index():
     return f"[{host}] Welcom to encoder server"
 
 @app.route("/encode", methods=["POST"])
+@handle_server_errors
 def encode():
     json_data = request.get_json()
     words = db_manager.get_all_illegal_words()
