@@ -6,7 +6,10 @@ import functools
 import socket
 from encoder import Encoder
 from database_manager import db_manager
+from history import History
 
+
+history = History()
 app = Flask(__name__)
 CORS(app)
 host = socket.gethostname()
@@ -37,7 +40,9 @@ def encode():
     if len(words) == 0:
         return "No illegal words", 404
     
-    return Encoder(json_data["source"], words).encode(), 200
+    encoded = Encoder(json_data["source"], words).encode()
+    
+    return encoded, 200
 @app.route("/add_word", methods=["POST"])
 @handle_server_errors
 def add_word():
@@ -77,6 +82,16 @@ def get_suggestions():
 def get_all_words_with_suggesions():
     return json.dumps(db_manager.get_all_words_with_suggesions(),default=str)
 
+
+@app.routre("/undo")
+@handle_server_errors
+def undo():
+    return history.undo()
+
+@app.routre("/redo")
+@handle_server_errors
+def redo():
+    return history.redo()
 
 
 @app.route("/help")
