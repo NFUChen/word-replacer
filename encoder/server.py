@@ -1,6 +1,5 @@
 
 from flask import Flask, request
-import json
 from flask_cors import CORS
 import functools
 import socket
@@ -77,12 +76,41 @@ def get_suggestions():
     json_data = request.get_json()
     illegal_word = json_data["illegal_word"]
     suggestions = db_manager.get_suggestions(illegal_word=illegal_word)
-    return json.dumps(suggestions,default=str)
+    return suggestions
 
 @app.route("/all_words_with_suggesions")
 @handle_server_errors
 def get_all_words_with_suggesions():
-    return json.dumps(db_manager.get_all_words_with_suggesions(),default=str)
+    return db_manager.get_all_words_with_suggesions()
+
+@app.route("/remove_illegal_word", methods=["POST"])
+@handle_server_errors
+def remove_illegal_word() -> None:
+    json_data = request.get_json()
+    illegal_word = json_data["illegal_word"]
+    db_manager.remove_illegal_word(illegal_word)
+
+    return "OK"
+
+@app.route("/rename_illegal_word", methods=["POST"])
+@handle_server_errors
+def update_illegal_word() -> None:
+    json_data = request.get_json()
+    illegal_word = json_data["illegal_word"]
+    new_illegal_word = json_data["new_illegal_word"]
+    db_manager.rename_illegal_word(illegal_word, new_illegal_word)
+
+    return "OK"
+
+@app.route("/update_suggestions")
+@handle_server_errors
+def update_suggestions() -> None:
+    json_data = request.get_json()
+    illegal_word = json_data["illegal_word"]
+    suggestions = json_data["suggestions"]
+    db_manager.update_suggestions(illegal_word, suggestions)
+
+    return "OK"
 
 
 @app.route("/undo")
