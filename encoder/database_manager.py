@@ -1,19 +1,32 @@
-{
-    "word": "word",
-    "suggestions": []
-}
+
 
 import pymongo
+
 class DataBaseManager:
     def __init__(self) -> None:
-        # self.client = pymongo.MongoClient("mongodb://db:27017/")
-        self.client = pymongo.MongoClient("mongodb://192.168.0.14:30659/")
+        self.client = pymongo.MongoClient("mongodb://db:27017/")
         self.db = self.client["suggestions"]["suggestions"]
 
     def _create_query(self, illegal_word: str) -> dict[str, str]:
         return {
             "illegal_word": illegal_word
         }
+    
+    def rename_illegal_word(self, illegal_word: str, new_illegal_word: str) -> None:
+        existing_word_dict:dict[str, str | list[str]] = self.db.find_one(self._create_query(illegal_word))
+        if not existing_word_dict:
+            raise ValueError(f"{illegal_word} is not in database")
+        
+        existing_word_dict["illegal_word"] = new_illegal_word
+        self.db.update_one(self._create_query(illegal_word), {"$set": existing_word_dict})
+    
+    def update_suggestions(self,illegal_word: str, suggestions: list[str]) -> None:
+        existing_word_dict:dict[str, str | list[str]] = self.db.find_one(self._create_query(illegal_word))
+        if not existing_word_dict:
+            raise ValueError(f"{illegal_word} is not in database")
+        
+        existing_word_dict["suggestions"] = suggestions
+        self.db.update_one(self._create_query(illegal_word), {"$set": existing_word_dict})
 
     def add_word(self, illegal_word: str, word: str) -> None:
         existing_word_dict:dict[str, str | list[str]] = self.db.find_one(self._create_query(illegal_word))
@@ -36,6 +49,9 @@ class DataBaseManager:
         }
         
         self.db.update_one(self._create_query(illegal_word), {"$set": updated})
+    
+    def remove_illegal_word(self, illegal_word: str) -> None:
+        self.db.delete_one(self._create_query(illegal_word))
 
     def remove_word(self, illegal_word: str, word: str) -> None:
         existing_word_dict:dict[str, str | list[str]] = self.db.find_one(self._create_query(illegal_word))
@@ -51,7 +67,9 @@ class DataBaseManager:
             "illegal_word": illegal_word, 
             "suggestions": suggestions
         }
-        
+        if len(suggestions) == 0:
+            self.db.delete_one(self._create_query(illegal_word))
+
         self.db.update_one(self._create_query(illegal_word), {"$set": updated})
 
     def get_suggestions(self, illegal_word: str) -> dict[str, str | list[str]]:
@@ -61,7 +79,12 @@ class DataBaseManager:
         return suggestions
 
     def get_all_words_with_suggesions(self) -> list[dict[str, str | list[str]]]:
-        return list(self.db.find())
+        docs = []
+        for doc in self.db.find():
+            doc["id"] = str(doc.pop("_id"))
+            docs.append(doc)
+
+        return docs
     
     def get_all_illegal_words(self) -> list[str]:
         return [
