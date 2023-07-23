@@ -102,7 +102,7 @@ def update_illegal_word() -> None:
 
     return "OK"
 
-@app.route("/update_suggestions")
+@app.route("/update_suggestions", methods=["POST"])
 @handle_server_errors
 def update_suggestions() -> None:
     json_data = request.get_json()
