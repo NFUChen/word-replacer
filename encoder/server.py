@@ -43,15 +43,15 @@ def encode():
     history.add_action(encoded)
     
     return encoded
-@app.route("/add_word", methods=["POST"])
+@app.route("/add_word_with_suggestions", methods=["POST"])
 @handle_server_errors
-def add_word():
+def add_word_with_suggestions():
     json_data = request.get_json()
     illegal_word = json_data["illegal_word"]
-    word = json_data["word"]
-    db_manager.add_word(
+    suggestions = json_data["suggestsions"]
+    db_manager.add_word_with_suggestions(
         illegal_word=illegal_word,
-        word=word
+        suggestions=suggestions
     )
 
     return "OK"

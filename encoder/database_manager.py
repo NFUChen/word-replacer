@@ -34,27 +34,16 @@ class DataBaseManager:
 
         self.db.update_one(self._create_query(illegal_word), {"$set": existing_word_dict})
 
-    def add_word(self, illegal_word: str, word: str) -> None:
-        existing_word_dict:dict[str, str | list[str]] = self.db.find_one(self._create_query(illegal_word))
-        if not existing_word_dict:
-            init_word = {
-                "illegal_word": illegal_word,
-                "suggestions": [word]
-            }
-            self.db.insert_one(init_word)
-            print(f"init word with {init_word} in db")
-            return
-        suggestions: list[str] = existing_word_dict["suggestions"]
-        if word in suggestions:
-            raise ValueError(f"{word} is already in {illegal_word} suggestions")
+    def add_word_with_suggestions(self, illegal_word: str, suggestions: list[str]) -> None:
+        if self.db.find_one(self._create_query(illegal_word)):
+            raise ValueError(f"{illegal_word} already exists in database")
         
-        suggestions.append(word)
-        updated = {
+        new_word = {
             "illegal_word": illegal_word, 
             "suggestions": suggestions
         }
         
-        self.db.update_one(self._create_query(illegal_word), {"$set": updated})
+        self.db.insert_one(new_word)
     
     def remove_illegal_words(self, illegal_words: list[str]) -> None:
         for word in illegal_words:
