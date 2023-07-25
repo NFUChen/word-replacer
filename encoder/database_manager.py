@@ -7,6 +7,9 @@ class DataBaseManager:
         self.client = pymongo.MongoClient("mongodb://db:27017/")
         self.db = self.client["suggestions"]["suggestions"]
 
+    def _is_contains_duplicates(self, suggestions: list[str]) -> bool:
+        return len(suggestions) != len(set(suggestions))
+
     def _create_query(self, illegal_word: str) -> dict[str, str]:
         return {
             "illegal_word": illegal_word
@@ -26,6 +29,9 @@ class DataBaseManager:
             raise ValueError(f"{illegal_word} is not in database")
         
         existing_word_dict["suggestions"] = suggestions
+        if self._is_contains_duplicates(suggestions):
+            raise ValueError(f"{suggestions} contains duplicates")
+
         self.db.update_one(self._create_query(illegal_word), {"$set": existing_word_dict})
 
     def add_word(self, illegal_word: str, word: str) -> None:
