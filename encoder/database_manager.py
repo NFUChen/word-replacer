@@ -94,9 +94,13 @@ class DataBaseManager:
         return docs
     
     def get_all_illegal_words(self) -> list[str]:
-        return [
+        all_words = [
             illegal_word["illegal_word"] for illegal_word in list(self.db.find())
         ]
+        if len(all_words) == 0:
+            raise ValueError("No illegal words")
+
+        return all_words
     
 db_manager = DataBaseManager()
 

@@ -38,12 +38,12 @@ def encode():
     json_data = request.get_json()
     words = db_manager.get_all_illegal_words()
     if len(words) == 0:
-        return "No illegal words", 404
+        return "No illegal words"
     
     encoded = Encoder(json_data["source"], words).encode()
     history.add_action(encoded)
     
-    return encoded, 200
+    return encoded
 @app.route("/add_word", methods=["POST"])
 @handle_server_errors
 def add_word():
