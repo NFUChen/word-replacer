@@ -37,8 +37,7 @@ def index():
 def encode():
     json_data = request.get_json()
     words = db_manager.get_all_illegal_words()
-    if len(words) == 0:
-        return "No illegal words"
+    
     
     encoded = Encoder(json_data["source"], words).encode()
     history.add_action(encoded)
