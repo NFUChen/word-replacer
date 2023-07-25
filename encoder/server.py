@@ -83,12 +83,12 @@ def get_suggestions():
 def get_all_words_with_suggesions():
     return db_manager.get_all_words_with_suggesions()
 
-@app.route("/remove_illegal_word", methods=["POST"])
+@app.route("/remove_illegal_words", methods=["POST"])
 @handle_server_errors
 def remove_illegal_word() -> None:
     json_data = request.get_json()
-    illegal_word = json_data["illegal_word"]
-    db_manager.remove_illegal_word(illegal_word)
+    illegal_word = json_data["illegal_words"]
+    db_manager.remove_illegal_words(illegal_word)
 
     return "OK"
 

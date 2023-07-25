@@ -50,8 +50,9 @@ class DataBaseManager:
         
         self.db.update_one(self._create_query(illegal_word), {"$set": updated})
     
-    def remove_illegal_word(self, illegal_word: str) -> None:
-        self.db.delete_one(self._create_query(illegal_word))
+    def remove_illegal_words(self, illegal_words: list[str]) -> None:
+        for word in illegal_words:
+            self.db.delete_one(self._create_query(word))
 
     def remove_word(self, illegal_word: str, word: str) -> None:
         existing_word_dict:dict[str, str | list[str]] = self.db.find_one(self._create_query(illegal_word))
