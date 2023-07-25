@@ -14,11 +14,17 @@ class DataBaseManager:
         return {
             "illegal_word": illegal_word
         }
+
+    def _is_naming_conflict(self, illegal_word: str) -> bool:
+        return self.db.find_one(self._create_query(illegal_word)) is not None
     
     def rename_illegal_word(self, illegal_word: str, new_illegal_word: str) -> None:
         existing_word_dict:dict[str, str | list[str]] = self.db.find_one(self._create_query(illegal_word))
         if not existing_word_dict:
             raise ValueError(f"{illegal_word} is not in database")
+        
+        if self._is_naming_conflict(new_illegal_word):
+            raise ValueError(f"{new_illegal_word} already exists in database")
         
         existing_word_dict["illegal_word"] = new_illegal_word
         self.db.update_one(self._create_query(illegal_word), {"$set": existing_word_dict})
