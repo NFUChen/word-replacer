@@ -48,7 +48,7 @@ def encode():
 def add_word_with_suggestions():
     json_data = request.get_json()
     illegal_word = json_data["illegal_word"]
-    suggestions = json_data["suggestsions"]
+    suggestions = json_data["suggestions"]
     db_manager.add_word_with_suggestions(
         illegal_word=illegal_word,
         suggestions=suggestions
