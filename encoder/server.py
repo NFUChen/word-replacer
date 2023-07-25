@@ -20,12 +20,12 @@ def handle_server_errors(func):
             return {
                 "data": func(*args, **kwargs),
                 "error": None
-            }
+            }, 200
         except Exception as error:
             return {
                 "data": None,
                 "error": str(error)
-            }, 500  # Return JSON response with error message and status code 500
+            }, 200
     return decorated
 
 @app.route("/")
