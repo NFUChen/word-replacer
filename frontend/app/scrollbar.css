@@ -1,0 +1,27 @@
+@import "./globals.css";
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-corner {
+  background: theme("colors.background");
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: theme("colors.primary.DEFAULT");
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: theme("colors.secondary.DEFAULT");
+}
