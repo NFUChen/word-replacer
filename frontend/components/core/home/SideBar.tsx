@@ -68,7 +68,6 @@ export const SideBar: React.FC<ISideBar> = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     setAutoComplete(autoCom);
-    console.log(autoCom);
   }, [autoCom, setAutoComplete]);
 
   useEffect(() => {
