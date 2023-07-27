@@ -36,10 +36,10 @@ def index():
 @handle_server_errors
 def encode():
     json_data = request.get_json()
-    words = db_manager.get_all_illegal_words()
+    words_with_suggestions = db_manager.get_all_words_as_key_with_suggesions()
     
     
-    encoded = Encoder(json_data["source"], words).encode()
+    encoded = Encoder(json_data["source"], words_with_suggestions).encode()
     history.add_action(encoded)
     
     return encoded

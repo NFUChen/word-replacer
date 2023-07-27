@@ -88,6 +88,9 @@ class DataBaseManager:
             docs.append(doc)
 
         return docs
+    def get_all_words_as_key_with_suggesions(self) -> dict[str, list[str]]:
+        return {doc["illegal_word"]: doc["suggestions"] for doc in self.db.find()}
+        
     
     def get_all_illegal_words(self) -> list[str]:
         all_words = [
