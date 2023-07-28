@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/core/common/ThemeProvider";
 import React from "react";
 import { Header } from "@/components/core/home/Header";
+import { useViewHeight } from "@/hooks/useViewHeight";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -26,7 +26,7 @@ export const SideBar: React.FC<ISideBar> = ({ isOpen, onClose }) => {
   const className = {
     containerClass: "fixed top-0 backdrop-blur-sm w-screen h-screen bg-primary-foreground/40 z-[999] flex justify-end",
     sideBarClass:
-      "absolute slide-right flex flex-col bg-primary-foreground transition-all duration-300 ease-in-out data-[state=false]:opacity-0 data-[state=false]:translate-x-1/4 shadow-lg w-screen sm:w-96 h-screen py-8 px-4",
+      "absolute slide-right screen-h bg-primary-foreground transition-all duration-300 ease-in-out data-[state=false]:opacity-0 data-[state=false]:translate-x-1/4 shadow-lg w-screen sm:w-96 py-8 px-4",
   };
 
   const onTransitionEnd = () => {

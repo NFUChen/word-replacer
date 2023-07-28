@@ -1,18 +1,13 @@
-import { SWRResponse } from "swr";
-import { SWRMutationResponse } from "swr/mutation";
-
 export type SuggesstionType = "warning" | "regular";
 
 export type RawEncodedJson = { type: SuggesstionType; content: string, replacements: string[] };
 
 export type EncodedJsonWithId = { type: SuggesstionType; content: string; id: WordId, replacements: string[] };
 
-export type Source = string;
-
 export type WordId = string;
 
 export type Sentence = {
-  source: Source;
+  raw_string: string;
   encoded_json: RawEncodedJson[];
 };
 
@@ -21,13 +16,13 @@ export type getEncodedJsonRequest = {
 }
 
 export interface ISentenceStore {
-  source: Source;
+  raw_string: string;
   encoded_json: EncodedJsonWithId[];
   currentWord?: EncodedJsonWithId;
   setSentence(sentence?: Sentence): void;
   setEncodedJsonById(modifiedJson: EncodedJsonWithId): void;
   setCurrentWord(word: EncodedJsonWithId): void;
   setEncodedJson(json: EncodedJsonWithId[]): void;
-  setSource(source: string): void;
+  setSource(raw_string: string): void;
   reset(): void;
 }

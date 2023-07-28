@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { nanoid } from "nanoid";
 import { create } from "zustand";
-import { EncodedJsonWithId, ISentenceStore, Sentence, getEncodedJsonRequest } from "./types";
+import { EncodedJsonWithId, ISentenceStore } from "./types";
 
 export const useSentenceStore = create<ISentenceStore>((set, get) => ({
-  source: "",
+  raw_string: "",
   encoded_json: [],
   currentWord: undefined,
   setSentence: sentence => {
@@ -17,7 +17,7 @@ export const useSentenceStore = create<ISentenceStore>((set, get) => ({
       }));
       return {
         encoded_json: encodedJsonWithId ?? [],
-        source: sentence?.source ?? "",
+        raw_string: sentence?.raw_string ?? "",
       };
     });
   },
@@ -45,6 +45,6 @@ export const useSentenceStore = create<ISentenceStore>((set, get) => ({
     }));
   },
   setCurrentWord: word => set(() => ({ currentWord: word })),
-  setSource: source => set(() => ({ source })),
+  setSource: raw_string => set(() => ({ raw_string })),
   reset: () => set(() => ({ encoded_json: [] })),
 }));

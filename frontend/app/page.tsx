@@ -12,12 +12,13 @@ import { useMutation } from "@/hooks/useMutation";
 import { Clipboard, ClipboardCheck, Maximize2, Minimize2, Redo2, RotateCcw, SpellCheck, Undo2 } from "lucide-react";
 import { useHistoryStore } from "@/store/historyStore";
 import { shallow } from "zustand/shallow";
+import { useClipboard } from "@/hooks/useClipboard";
 
 export default function Home() {
   const [isMaxSize, setIsMaxSize] = useState(false);
-  const [isCopyed, setIsCopyed] = useState(false);
   const encodedJson = useSentenceStore(state => state.encoded_json);
-  const source = useSentenceStore(state => state.source);
+  const rawString = useSentenceStore(state => state.raw_string);
+  const { copy, copied } = useClipboard();
   const [init, undo, redo, history, position, getElement] = useHistoryStore(
     state => [state.init, state.undo, state.redo, state.history, state.position, state.getElement],
     shallow,
@@ -30,8 +31,8 @@ export default function Home() {
   } = useMutation<getEncodedJsonRequest, Sentence>("post", "/encode");
 
   const isEncoded = useMemo((): boolean => encodedJson.length !== 0, [encodedJson]);
-  const isEmpty = useMemo((): boolean => source.length === 0, [source]);
-  const cardClass = isMaxSize ? "max-w-full max-h-full" : "max-w-[800px] max-h-[600px]";
+  const isEmpty = useMemo((): boolean => rawString.length === 0, [rawString]);
+  const cardClass = isMaxSize ? "max-w-full max-h-full" : "max-w-[800px] max-h-[400px] sm:max-h-[600px]";
 
   const toggleResize = () => {
     setIsMaxSize(state => !state);
@@ -45,17 +46,13 @@ export default function Home() {
 
   const handleTrigger = useCallback(
     (e: MouseEvent) => {
-      encode({ source });
+      encode({ source: rawString });
     },
-    [encode, source],
+    [encode, rawString],
   );
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(source);
-    setIsCopyed(true);
-    setTimeout(() => {
-      setIsCopyed(false);
-    }, 3000);
+    copy(rawString);
   };
 
   const handleUndo = () => {
@@ -93,7 +90,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative flex h-[calc(100vh-56px)] flex-col p-4">
+    <div className="relative screen-h-header p-4">
       <div className="h-full flex items-center justify-center overflow-hidden">
         <Card className={`${cardClass} w-full h-full transition-[max-height,max-width] ease-in-out flex flex-col`}>
           {/* header */}
@@ -138,8 +135,8 @@ export default function Home() {
                   <RotateCcw size={16} />
                   <span className="ml-2">編輯</span>
                 </Button>
-                <Button disabled={isCopyed} onClick={handleCopy} variant="outline">
-                  {isCopyed ? <ClipboardCheck className="fade-out" size={16} /> : <Clipboard className="fade-out" size={16} />}
+                <Button disabled={copied} onClick={handleCopy} variant="outline">
+                  {copied ? <ClipboardCheck className="fade-out" size={16} /> : <Clipboard className="fade-out" size={16} />}
                   <span className="ml-2">複製</span>
                 </Button>
               </div>
