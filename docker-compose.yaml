@@ -9,10 +9,13 @@ services:
       replicas: 1
   nginx:
     restart: always
-    image: nginx:latest
+    build:
+      context: ./nginx
+      dockerfile: dockerfile
     ports:
       - "5000:5000"
       - "80:80"
+      - "443:443"
     depends_on:
       - encoder
     volumes:
