@@ -117,7 +117,7 @@ export const SuggestionCard: React.FC<ISuggestionCard> = memo(({ type, content, 
         <Popover>
           <PopoverTrigger
             onClick={handleTrigger}
-            className="text-md rounded py-0 data-[change=true]:bg-green-400/40 transition-colors duration-300  data-[state=open]:bg-destructive/40"
+            className="text-md rounded py-0 px-1 data-[change=true]:bg-green-400/40 transition-colors duration-300  data-[state=open]:bg-destructive/40"
           >
             <span
               data-id={id}
