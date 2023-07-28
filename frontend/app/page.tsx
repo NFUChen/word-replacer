@@ -41,7 +41,7 @@ export default function Home() {
   const updateContent = () => {
     const sentenceString = getElement().reduce((a: any, b: EncodedJsonWithId) => a.concat(b.content), "");
     useSentenceStore.getState().setEncodedJson(getElement());
-    useSentenceStore.getState().setSource(sentenceString);
+    useSentenceStore.getState().setRawString(sentenceString);
   };
 
   const handleTrigger = useCallback(

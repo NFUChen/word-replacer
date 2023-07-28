@@ -45,6 +45,6 @@ export const useSentenceStore = create<ISentenceStore>((set, get) => ({
     }));
   },
   setCurrentWord: word => set(() => ({ currentWord: word })),
-  setSource: raw_string => set(() => ({ raw_string })),
+  setRawString: raw_string => set(() => ({ raw_string })),
   reset: () => set(() => ({ encoded_json: [] })),
 }));

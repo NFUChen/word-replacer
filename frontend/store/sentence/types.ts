@@ -23,6 +23,6 @@ export interface ISentenceStore {
   setEncodedJsonById(modifiedJson: EncodedJsonWithId): void;
   setCurrentWord(word: EncodedJsonWithId): void;
   setEncodedJson(json: EncodedJsonWithId[]): void;
-  setSource(raw_string: string): void;
+  setRawString(raw_string: string): void;
   reset(): void;
 }

@@ -19,7 +19,7 @@ interface IEditArea {
 
 export const EditArea: React.FC<IEditArea> = ({ isMutating }) => {
   const encodedJson = useSentenceStore(state => state.encoded_json);
-  const [source, setSource] = useSentenceStore(state => [state.source, state.setSource], shallow);
+  const [rawString, setRawString] = useSentenceStore(state => [state.raw_string, state.setRawString], shallow);
   const contentRef = useRef<HTMLDivElement>(null);
 
   if (isMutating) {
@@ -37,8 +37,8 @@ export const EditArea: React.FC<IEditArea> = ({ isMutating }) => {
         </div>
       ) : (
         <Textarea
-          value={source}
-          onInput={(e: ChangeEvent<HTMLTextAreaElement>) => setSource(e.target.value)}
+          value={rawString}
+          onInput={(e: ChangeEvent<HTMLTextAreaElement>) => setRawString(e.target.value)}
           className="fade-out text-lg py-4 px-6 leading-8 tracking-wide resize-none h-full border-0 focus-visible:ring-0 focus-visible:ring-none focus-visible:ring-offset-0 focus-visible:outline-none "
           placeholder="請輸入或貼上文字"
           spellCheck={false}
@@ -70,7 +70,7 @@ export const SuggestionCard: React.FC<ISuggestionCard> = memo(({ type, content, 
   const autoComplete = usePreferenceStore(state => state.autoComplete);
   const setEncodedJsonById = useSentenceStore(state => state.setEncodedJsonById);
   const setCurrentWord = useSentenceStore(state => state.setCurrentWord);
-  const setSource = useSentenceStore(state => state.setSource);
+  const setRawString = useSentenceStore(state => state.setRawString);
   const setElement = useHistoryStore(state => state.setElement);
   const [showAll, setShowAll] = useState(false);
 
@@ -97,7 +97,7 @@ export const SuggestionCard: React.FC<ISuggestionCard> = memo(({ type, content, 
     }
 
     setElement(JSON.parse(JSON.stringify(useSentenceStore.getState().encoded_json)));
-    setSource(useSentenceStore.getState().encoded_json.reduce((a, b) => a.concat(b.content), ""));
+    setRawString(useSentenceStore.getState().encoded_json.reduce((a, b) => a.concat(b.content), ""));
   };
 
   const handleTrigger = () => {
