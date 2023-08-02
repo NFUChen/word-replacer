@@ -6,11 +6,8 @@ import { useMemo, useState } from "react";
 import { SideBar } from "@/components/core/home/SideBar";
 import { usePathname, useRouter } from "next/navigation";
 import { ThemeSwitch } from "./ThemeSwitch";
-import { useViewHeight } from "@/hooks/useViewHeight";
 
 export const Header: React.FC = () => {
-  useViewHeight()
-  
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const router = useRouter();
   const pathName = usePathname();
@@ -29,7 +26,7 @@ export const Header: React.FC = () => {
     <>
       <div className="z-50 flex h-[56px] items-center px-4 fade-out">
         {!isHomepage ? (
-          <Button onClick={() => router.back()} variant="ghost">
+          <Button onClick={() => router.replace("/")} variant="ghost">
             <CornerUpLeft size={16} />
           </Button>
         ) : null}

@@ -90,7 +90,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative screen-h-header p-4">
+    <div className="relative flex flex-col h-screen-header p-4">
       <div className="h-full flex items-center justify-center overflow-hidden">
         <Card className={`${cardClass} w-full h-full transition-[max-height,max-width] ease-in-out flex flex-col`}>
           {/* header */}

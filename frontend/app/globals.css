@@ -89,20 +89,6 @@
   animation-iteration-count: infinite;
 }
 
-.screen-h-header {
-  height: calc(100vh - 56px);
-  height: calc(var(--vh, 1vh) * 100 - 56px);
-  display: flex;
-  flex-direction: column;
-}
-
-.screen-h {
-  height: 100vh;
-  height: calc(var(--vh, 1vh) * 100);
-  display: flex;
-  flex-direction: column;
-}
-
 @keyframes progress-sliding {
   0% {
     left: -100%;

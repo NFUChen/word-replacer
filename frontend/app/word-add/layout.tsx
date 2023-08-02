@@ -12,7 +12,7 @@ interface IWordAddLayoutProps {
 
 export default function WordAddLayout({ children }: IWordAddLayoutProps) {
   return (
-    <div className="screen-h-header">
+    <div className="h-screen-header flex flex-col">
       {children}
     </div>
   );

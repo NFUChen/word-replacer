@@ -5,13 +5,12 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/core/common/ThemeProvider";
 import React from "react";
 import { Header } from "@/components/core/home/Header";
-import { useViewHeight } from "@/hooks/useViewHeight";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "首頁",
-  description: "首頁",
+  title: "首頁 - 文案校正",
+  description: "首頁 - 文案校正",
 };
 
 interface IRootLayoutProps {
