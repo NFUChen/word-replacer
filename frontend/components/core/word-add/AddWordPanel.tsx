@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@radix-ui/react-separator";
-import { ChangeEvent, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Edit3, GripVertical, Loader2, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { WordSuggestion } from "./columns";
@@ -39,7 +39,6 @@ export const AddWordPannel: React.FC<IAddWordPannel> = ({ isOpen, onClose, row, 
   const [isAddWordDialogOpen, setIsAddWordDialogOpen] = useState(false);
   const isEditMode = useMemo(() => !!row, [row]);
   const isComposition = useRef(false);
-  const isUpdating = useRef(false);
   const addWordPannelRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -87,6 +86,9 @@ export const AddWordPannel: React.FC<IAddWordPannel> = ({ isOpen, onClose, row, 
       "absolute slide-right flex flex-col bg-background border-l-[1px] transition-all duration-300 ease-in-out data-[state=false]:opacity-0 data-[state=false]:translate-x-1/4 shadow-lg w-screen sm:max-w-[640px] h-screen py-8 px-4",
   };
 
+  /**
+   * Debounce for updating word name
+   */
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onIllegalWordChange = useCallback(
     debounce((illegalWord, newIllegalWord, row) => {
@@ -97,13 +99,9 @@ export const AddWordPannel: React.FC<IAddWordPannel> = ({ isOpen, onClose, row, 
     [],
   );
 
-  const onTransitionEnd = () => {
-    if (!isOpen) {
-      setIsMounted(false);
-    }
-  };
-
-  // Function to update list on drop
+  /**
+   * Function to update list on drop
+   */
   const handleDrop = (droppedItem: DropResult, provided: ResponderProvided) => {
     // Ignore drop outside droppable container
     if (!droppedItem.destination) return;
@@ -114,15 +112,22 @@ export const AddWordPannel: React.FC<IAddWordPannel> = ({ isOpen, onClose, row, 
     updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
     // Update State
     setOrderedList(updatedList);
-    updateSuggestions({
-      id: row?.original.id ?? "",
-      illegal_word: illegalWord,
-      suggestions: updatedList,
-    });
+    if (isEditMode) {
+      updateSuggestions({
+        id: row?.original.id ?? "",
+        illegal_word: illegalWord,
+        suggestions: updatedList,
+      });
+    }
   };
 
+  /**
+   * Remove suggestion
+   */
   const handleRemoveSuggestion = (index: number) => {
+    // if is edit mode, it will check orderedList length and call update api
     if (isEditMode) {
+
       if (orderedList.length <= 1) {
         toast({
           title: "警告",
@@ -131,19 +136,34 @@ export const AddWordPannel: React.FC<IAddWordPannel> = ({ isOpen, onClose, row, 
         });
         return;
       }
-      isUpdating.current = true;
+      updateSuggestions({
+        id: row?.original.id ?? "",
+        illegal_word: illegalWord,
+        suggestions: orderedList.filter((value, i) => index !== i),
+      });
+
+      return;
     }
 
+    // if not, just set the list
     setOrderedList(state => {
       state.splice(index, 1);
       return [...state];
     });
+
+    
   };
 
+  /**
+   * Submit add word, call add word api
+   */
   const handleAddWord = () => {
     addWord({ illegal_word: illegalWord, suggestions: orderedList });
   };
 
+  /**
+   * Add suggestion word
+   */
   const handleAddSuggestion = (suggestion: string) => {
     if (isEditMode) {
       updateSuggestions({
@@ -166,13 +186,19 @@ export const AddWordPannel: React.FC<IAddWordPannel> = ({ isOpen, onClose, row, 
     setOrderedList(state => [...state, suggestion]);
   };
 
-  useLayoutEffect(() => {
-    if (isOpen) {
-      setIsMounted(true);
-      setIllegalWord(row?.original.illegal_word ?? "");
-      setOrderedList([...(row?.original.suggestions ?? [])]);
+  // For slide animation
+  const onTransitionEnd = () => {
+    if (!isOpen) {
+      setIsMounted(false);
     }
-  }, [isOpen, row]);
+  };
+
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+    setIsMounted(true);
+    setIllegalWord(row?.original.illegal_word ?? "");
+    setOrderedList([...(row?.original.suggestions ?? [])]);
+  }, [isEditMode, isOpen, row]);
 
   return (
     <>
