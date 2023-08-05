@@ -9,7 +9,7 @@ import { WordSuggestion } from "./columns";
 import { Row, Table } from "@tanstack/react-table";
 import { AddWordDialog } from "./AddWordDialog";
 import { useMutation } from "@/hooks/useMutation";
-import { mutate } from "swr";
+import { useSWRConfig } from "swr";
 import { debounce } from "@/lib/utils";
 import { DragDropContext, Draggable, DropResult, Droppable, ResponderProvided } from "@hello-pangea/dnd";
 import { useToast } from "@/components/ui/use-toast";
@@ -41,6 +41,7 @@ export const AddWordPannel: React.FC<IAddWordPannel> = ({ isOpen, onClose, row, 
   const isComposition = useRef(false);
   const addWordPannelRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const { mutate } = useSWRConfig();
 
   const { trigger: addWord, isMutating: isAddMutating } = useMutation<AddWordRequest, string>(
     "post",

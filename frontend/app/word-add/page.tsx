@@ -29,7 +29,7 @@ export default function WordAdd() {
 
   const { data, isLoading, mutate } = useFetch<null, WordSuggestion[]>(
     { url: "/all_words_with_suggesions" },
-    { errorRetryCount: 0 },
+    { errorRetryCount: 0, revalidateIfStale: false },
   );
 
   const wordData = useMemo(() => data?.data ?? [], [data]);

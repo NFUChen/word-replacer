@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/core/common/ThemeProvider";
 import React from "react";
 import { Header } from "@/components/core/home/Header";
+import { SWRProvider } from "@/components/core/common/SWRProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,11 +41,13 @@ export default function RootLayout({ children }: IRootLayoutProps) {
             <rect width="100%" height="100%" fill="url(#grid)" />
           </svg>
         </div>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <Header />
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <SWRProvider>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            <Header />
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </SWRProvider>
       </body>
     </html>
   );
