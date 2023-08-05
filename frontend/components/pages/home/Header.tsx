@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Settings, CornerUpLeft } from "lucide-react";
 import { useMemo, useState } from "react";
-import { SideBar } from "@/components/core/home/SideBar";
+import { SideBar } from "@/components/pages/home/SideBar";
 import { usePathname, useRouter } from "next/navigation";
 import { ThemeSwitch } from "./ThemeSwitch";
 

@@ -5,9 +5,9 @@ import { ErrorMessge, axiosInstance as axios } from "@/base/baseAxios";
 import { AxiosRequestConfig } from "axios";
 
 type BackendResponse<T> = {
-  data: T,
-  error: string,
-}
+  data: T;
+  error: string;
+};
 
 export const useFetch = <Params, Response>(
   { url, args }: { url: string; args?: AxiosRequestConfig<Params> },
@@ -32,10 +32,14 @@ export const useFetch = <Params, Response>(
       }
     : {
         fetcher: async (url: string) => await request(url),
-        requestArgs: url
+        requestArgs: url,
       };
 
-  const response = useSWR<BackendResponse<Response>>(element.requestArgs, element.fetcher, { errorRetryCount: 0, ...config });
+  const response = useSWR<BackendResponse<Response>>(element.requestArgs, element.fetcher, {
+    errorRetryCount: 0,
+    revalidateIfStale: false,
+    ...config,
+  });
 
   useEffect(() => {
     if (response.error) {
@@ -46,7 +50,7 @@ export const useFetch = <Params, Response>(
       });
     }
   }, [response.error, toast]);
-  
+
   useEffect(() => {
     if (response.data?.error) {
       toast({
@@ -55,7 +59,7 @@ export const useFetch = <Params, Response>(
         description: response.data?.error,
       });
     }
-  }, [response.data, toast])
+  }, [response.data, toast]);
 
   return { ...response };
 };

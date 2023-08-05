@@ -1,20 +1,20 @@
 "use client";
 
-import { DataTable } from "@/components/core/common/DataTable";
+import { DataTable } from "@/components/core/DataTable";
 import { Container, LayoutGrid, Loader2, Plus, Search, Table } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MouseEvent, useMemo, useState } from "react";
-import { cn, debounce } from "@/lib/utils";
+import { cn, debounce } from "@/utils/utils";
 import { useFetch } from "@/hooks/useFetch";
-import { WordSuggestion, wordAddcolumns } from "@/components/core/word-add/columns";
 import { Separator } from "@/components/ui/separator";
 import { getCoreRowModel, getFilteredRowModel, useReactTable } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
-import { AddWordPannel } from "@/components/core/word-add/AddWordPanel";
 import { useMutation } from "@/hooks/useMutation";
-import { DeleteConfirmDialog } from "@/components/core/word-add/DeleteConfirmDialog";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { DataGrid } from "@/components/core/word-add/DataGrid";
+import { AddWordPannel } from "@/components/pages/word-add/AddWordPanel";
+import { DataGrid } from "@/components/pages/word-add/DataGrid";
+import { DeleteConfirmDialog } from "@/components/pages/word-add/DeleteConfirmDialog";
+import { WordSuggestion, wordAddcolumns } from "@/components/pages/word-add/columns";
 
 type RemoveIllegalWordRequest = {
   illegal_words: string[];
@@ -27,11 +27,10 @@ export default function WordAdd() {
   const [currentRowId, setCurrentRowId] = useState<string>("");
   const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] = useState(false);
 
-  const { data, isLoading, mutate } = useFetch<null, WordSuggestion[]>(
-    { url: "/all_words_with_suggesions" },
-    { errorRetryCount: 0, revalidateIfStale: false },
-  );
+  // fetch data
+  const { data, isLoading, mutate } = useFetch<null, WordSuggestion[]>({ url: "/all_words_with_suggesions" });
 
+  // get data
   const wordData = useMemo(() => data?.data ?? [], [data]);
 
   const onPanelOpen = (e: MouseEvent, id?: string) => {
@@ -64,13 +63,17 @@ export default function WordAdd() {
     [table.getSelectedRowModel()],
   );
 
-  const { trigger: removeIllegalWord } = useMutation<RemoveIllegalWordRequest, string>("post", "/remove_illegal_words", {
-    onSuccess: () => {
-      mutate();
-      setIsConfirmDeleteDialogOpen(false);
-      table.resetRowSelection();
+  const { trigger: removeIllegalWord } = useMutation<RemoveIllegalWordRequest, string>(
+    "post",
+    "/remove_illegal_words",
+    {
+      onSuccess: () => {
+        mutate();
+        setIsConfirmDeleteDialogOpen(false);
+        table.resetRowSelection();
+      },
     },
-  });
+  );
 
   const currentRow = table.getRowModel().rows.find(row => row.id === currentRowId);
 
@@ -96,7 +99,7 @@ export default function WordAdd() {
 
   return (
     <>
-      <div className="flex flex-col overflow-hidden p-8 container">
+      <div className="container flex flex-col overflow-hidden p-8">
         <div className="mb-2 items-center justify-between md:flex">
           <div className="flex text-lg font-bold">
             <Container />

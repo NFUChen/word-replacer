@@ -2,10 +2,10 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from "@/components/core/common/ThemeProvider";
 import React from "react";
-import { Header } from "@/components/core/home/Header";
-import { SWRProvider } from "@/components/core/common/SWRProvider";
+import { Header } from "@/components/pages/home/Header";
+import { SWRProvider } from "@/components/core/SWRProvider";
+import { ThemeProvider } from "@/components/core/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 

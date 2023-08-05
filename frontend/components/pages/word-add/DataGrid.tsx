@@ -1,6 +1,6 @@
 import { Table } from "@tanstack/react-table";
 import { WordSuggestion } from "./columns";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle, CardContent } from "@/components/ui/card";
 import { Edit2, CircleOff } from "lucide-react";

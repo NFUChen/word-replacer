@@ -2,7 +2,7 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { flexRender, Table } from "@tanstack/react-table";
 
 interface IDataTableProps<TData, TValue> {

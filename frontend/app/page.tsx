@@ -4,7 +4,7 @@ import "@/app/scrollbar.css";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { EditArea } from "../components/core/home/EditArea";
+import { EditArea } from "../components/pages/home/EditArea";
 import { useSentenceStore } from "@/store/sentence/sentenceStore";
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { EncodedJsonWithId, Sentence, getEncodedJsonRequest } from "@/store/sentence/types";
@@ -13,22 +13,20 @@ import { Clipboard, ClipboardCheck, Maximize2, Minimize2, Redo2, RotateCcw, Spel
 import { useHistoryStore } from "@/store/historyStore";
 import { shallow } from "zustand/shallow";
 import { useClipboard } from "@/hooks/useClipboard";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [isMaxSize, setIsMaxSize] = useState(false);
   const encodedJson = useSentenceStore(state => state.encoded_json);
   const rawString = useSentenceStore(state => state.raw_string);
   const { copy, copied } = useClipboard();
+  const router = useRouter();
   const [init, undo, redo, history, position, getElement] = useHistoryStore(
     state => [state.init, state.undo, state.redo, state.history, state.position, state.getElement],
     shallow,
   );
 
-  const {
-    trigger: encode,
-    isMutating,
-    data,
-  } = useMutation<getEncodedJsonRequest, Sentence>("post", "/encode");
+  const { trigger: encode, isMutating, data } = useMutation<getEncodedJsonRequest, Sentence>("post", "/encode");
 
   const isEncoded = useMemo((): boolean => encodedJson.length !== 0, [encodedJson]);
   const isEmpty = useMemo((): boolean => rawString.length === 0, [rawString]);
@@ -86,16 +84,18 @@ export default function Home() {
   }, [data, init]);
 
   useEffect(() => {
+    router.prefetch("/word-add");
     handleReset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className="relative flex flex-col h-screen-header p-4">
-      <div className="h-full flex items-center justify-center overflow-hidden">
-        <Card className={`${cardClass} w-full h-full transition-[max-height,max-width] ease-in-out flex flex-col`}>
+    <div className="relative flex h-screen-header flex-col p-4">
+      <div className="flex h-full items-center justify-center overflow-hidden">
+        <Card className={`${cardClass} flex h-full w-full flex-col transition-[max-height,max-width] ease-in-out`}>
           {/* header */}
           <CardHeader className="py-4">
-            <div className="font-bold text-lg flex justify-between items-center">
+            <div className="flex items-center justify-between text-lg font-bold">
               <span>文案校正</span>
               <Button onClick={toggleResize} className="h-auto text-primary" variant="ghost">
                 {isMaxSize ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
@@ -113,7 +113,7 @@ export default function Home() {
           <Separator className="h-[.5px]" />
 
           {/* footer */}
-          <CardFooter className="flex px-4 pt-2 pb-4 items-center">
+          <CardFooter className="flex items-center px-4 pb-4 pt-2">
             {encodedJson.length ? (
               <div>
                 <Button disabled={position <= 0} onClick={handleUndo} className="rounded-r-none" variant="outline">
@@ -122,7 +122,7 @@ export default function Home() {
                 <Button
                   disabled={position >= history.length - 1}
                   onClick={handleRedo}
-                  className="border-l-0 rounded-l-none"
+                  className="rounded-l-none border-l-0"
                   variant="outline"
                 >
                   <Redo2 size={16} />
@@ -130,13 +130,17 @@ export default function Home() {
               </div>
             ) : null}
             {isEncoded ? (
-              <div className="flex flex-auto justify-between ml-4">
+              <div className="ml-4 flex flex-auto justify-between">
                 <Button onClick={handleReset} variant="outline">
                   <RotateCcw size={16} />
                   <span className="ml-2">編輯</span>
                 </Button>
                 <Button disabled={copied} onClick={handleCopy} variant="outline">
-                  {copied ? <ClipboardCheck className="fade-out" size={16} /> : <Clipboard className="fade-out" size={16} />}
+                  {copied ? (
+                    <ClipboardCheck className="fade-out" size={16} />
+                  ) : (
+                    <Clipboard className="fade-out" size={16} />
+                  )}
                   <span className="ml-2">複製</span>
                 </Button>
               </div>

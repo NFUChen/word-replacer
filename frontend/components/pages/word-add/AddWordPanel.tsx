@@ -10,7 +10,7 @@ import { Row, Table } from "@tanstack/react-table";
 import { AddWordDialog } from "./AddWordDialog";
 import { useMutation } from "@/hooks/useMutation";
 import { useSWRConfig } from "swr";
-import { debounce } from "@/lib/utils";
+import { debounce } from "@/utils/utils";
 import { DragDropContext, Draggable, DropResult, Droppable, ResponderProvided } from "@hello-pangea/dnd";
 import { useToast } from "@/components/ui/use-toast";
 
