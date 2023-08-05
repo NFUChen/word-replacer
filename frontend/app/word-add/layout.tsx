@@ -9,7 +9,7 @@ interface IWordAddLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function WordAddLayout({ children }: IWordAddLayoutProps) {
+export default function WordAddLayout({ children }: IWordAddLayoutProps) {
   return (
     <div className="h-screen-header flex flex-col">
       {children}

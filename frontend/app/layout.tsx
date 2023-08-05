@@ -18,11 +18,11 @@ interface IRootLayoutProps {
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: IRootLayoutProps) {
+export default async function RootLayout({ children }: IRootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <div className="fixed w-screen h-screen z-[-99]">
+        <div className="fixed z-[-99] h-screen w-screen">
           <svg
             className="stroke-zinc-300/10 dark:stroke-zinc-900/20"
             width="100%"

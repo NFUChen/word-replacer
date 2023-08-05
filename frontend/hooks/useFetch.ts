@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import useSWR, { SWRConfiguration, SWRResponse } from "swr";
 import { useToast } from "@/components/ui/use-toast";
-import { ErrorMessge, axiosInstance as axios } from "@/base/baseAxios";
+import { ErrorMessge, axiosInstance as axios } from "@/utils/baseAxios";
 import { AxiosRequestConfig } from "axios";
 
 type BackendResponse<T> = {

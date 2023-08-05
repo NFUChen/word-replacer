@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import useSWRMutation, { SWRMutationConfiguration, SWRMutationResponse } from "swr/mutation";
 import { useToast } from "@/components/ui/use-toast";
 import { Key } from "swr";
-import { ErrorMessge, axiosInstance as axios } from "@/base/baseAxios";
+import { ErrorMessge, axiosInstance as axios } from "@/utils/baseAxios";
 
 type FetchMethod = "post" | "patch" | "delete";
 
